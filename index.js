@@ -260,10 +260,6 @@ function saveReport() {
     return;
   }
 
-  if (this.config.fileName === null) {
-    return '0';
-  }
-
   const htmlTemplateFilename = path.resolve(__dirname, 'report.hbs');
   const htmlReportFilename = path.resolve(process.cwd(), this.config.htmlReportPath, `a11y-${browserName}-${fileName}.html`);
 
