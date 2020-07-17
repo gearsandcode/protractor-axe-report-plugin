@@ -29,6 +29,7 @@ const allTestResults = [];
 var currentTestResults = [];
 var browserName = '';
 var pluginConfig = {};
+var filename = '';
 
 const green = '\x1b[32m';
 const red = '\x1b[31m';
@@ -257,8 +258,12 @@ function saveReport() {
     return;
   }
 
+  if (this.config.filename === null) {
+    return '0';
+  }
+
   const htmlTemplateFilename = path.resolve(__dirname, 'report.hbs');
-  const htmlReportFilename = path.resolve(process.cwd(), this.config.htmlReportPath, `a11y-${browserName}.html`);
+  const htmlReportFilename = path.resolve(process.cwd(), this.config.htmlReportPath, `a11y-${browserName}-${filename}.html`);
 
   const impactSortWeight = [
     'minor',
