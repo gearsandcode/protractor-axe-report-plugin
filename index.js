@@ -29,7 +29,7 @@ const allTestResults = [];
 var currentTestResults = [];
 var browserName = '';
 var pluginConfig = {};
-var filename = '';
+var fileName = '';
 
 const green = '\x1b[32m';
 const red = '\x1b[31m';
@@ -62,6 +62,8 @@ runAxeTest = function(testName, selector) {
     browser.driver.getCapabilities()
       .then((capabilities) => {
         browserName = capabilities.get('browserName');
+        specName = capabilities.specs[0].split('/');
+        fileName = spec[spec.length - 1].split('.')[0];
         if (browserName === 'chrome' || browserName === 'firefox') {
           if (params.include) ensureArray(params.include).forEach((item) => builder.include(item));
           if (selector) ensureArray(selector).forEach((item) => builder.include(item));
@@ -258,12 +260,12 @@ function saveReport() {
     return;
   }
 
-  if (this.config.filename === null) {
+  if (this.config.fileName === null) {
     return '0';
   }
 
   const htmlTemplateFilename = path.resolve(__dirname, 'report.hbs');
-  const htmlReportFilename = path.resolve(process.cwd(), this.config.htmlReportPath, `a11y-${browserName}-${filename}.html`);
+  const htmlReportFilename = path.resolve(process.cwd(), this.config.htmlReportPath, `a11y-${browserName}-${fileName}.html`);
 
   const impactSortWeight = [
     'minor',
