@@ -17,7 +17,7 @@ exports.config = {
     path: '../index.js',
     ignoreAxeFailures: true,
     htmlReportPath: 'reports',
-    htmlReportFileName: 'a11y-${capabilities.browserName}-${capabilities.name}.html',
+    htmlReportFilename: 'a11y-#{capabilities.browserName}-#{capabilities.name}.html',
     displayHelpUrl: true,
     displayContext: true,
     displayPasses: true,

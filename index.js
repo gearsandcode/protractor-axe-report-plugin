@@ -61,8 +61,8 @@ runAxeTest = function(testName, selector) {
     .then((protractorConfig) => {
       const capabilities = protractorConfig.capabilities;
       browserName = capabilities.browserName;
-      if (pluginConfig.htmlReportFileName) {
-        fileName = eval("'use strict'; `" + pluginConfig.htmlReportFileName + "`");
+      if (pluginConfig.htmlReportFilename) {
+        fileName = eval("'use strict'; `" + pluginConfig.htmlReportFilename.replace(/#{/g, '${') + "`");
       } else {
         fileName = `a11y-${browserName}.html`;
       }
