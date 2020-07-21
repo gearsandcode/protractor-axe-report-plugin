@@ -55,30 +55,30 @@ function onPrepare() {
 }
 
 runAxeTest = function(testName, selector) {
-  var params = pluginConfig.globalParams;
+  const params = pluginConfig.globalParams;
   const builder = AxeBuilder(browser.driver);
-
-  return new Promise((resolve, reject) => {
-    browser.driver.getCapabilities()
-      .then((capabilities) => {
-        browserName = capabilities.get('browserName');
-        specName = capabilities.specs[0].split('/');
-        fileName = spec[spec.length - 1].split('.')[0];
-        if (browserName === 'chrome' || browserName === 'firefox') {
-          if (params.include) ensureArray(params.include).forEach((item) => builder.include(item));
-          if (selector) ensureArray(selector).forEach((item) => builder.include(item));
-          if (params.exclude) ensureArray(params.exclude).forEach((item) => builder.exclude(item));
-          if (params.options) builder.options(params.options);
-          builder.analyze((results) => {
-              addResults(testName, browserName, results);
-              resolve(results);
-            });
-        } else {
-          console.log(`Skipping aXe tests in unsupported browser (${browserName}).`);
-          resolve();
-        }
-      });
-  });
+  return browser.getProcessedConfig()
+    .then((protractorConfig) => {
+      const capabilities = protractorConfig.capabilities;
+      browserName = capabilities.browserName;
+      if (pluginConfig.htmlReportFileName) {
+        fileName = eval("'use strict'; `" + pluginConfig.htmlReportFileName + "`");
+      } else {
+        fileName = `a11y-${browserName}.html`;
+      }
+      if (browserName === 'chrome' || browserName === 'firefox') {
+        if (params.include) ensureArray(params.include).forEach((item) => builder.include(item));
+        if (selector) ensureArray(selector).forEach((item) => builder.include(item));
+        if (params.exclude) ensureArray(params.exclude).forEach((item) => builder.exclude(item));
+        if (params.options) builder.options(params.options);
+        return builder.analyze((results) => {
+          addResults(testName, browserName, results);
+          return results;
+        });
+      } else {
+        console.log(`Skipping aXe tests in unsupported browser (${browserName}).`);
+      }
+    });
 }
 
 function ensureArray(potentialArray) {
@@ -261,7 +261,7 @@ function saveReport() {
   }
 
   const htmlTemplateFilename = path.resolve(__dirname, 'report.hbs');
-  const htmlReportFilename = path.resolve(process.cwd(), this.config.htmlReportPath, `a11y-${browserName}-${fileName}.html`);
+  const htmlReportFilename = path.resolve(process.cwd(), this.config.htmlReportPath, fileName);
 
   const impactSortWeight = [
     'minor',
