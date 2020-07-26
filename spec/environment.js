@@ -1,6 +1,6 @@
 var puppeteer = require('puppeteer');
 
- // Common configuration files with defaults plus overrides from environment vars
+// Common configuration files with defaults plus overrides from environment vars
 var webServerDefaultPort = 8081;
 
 module.exports = {
@@ -8,11 +8,12 @@ module.exports = {
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
     'browserName':
-        (process.env.TEST_BROWSER_NAME || 'chrome'),
+      (process.env.TEST_BROWSER_NAME || 'chrome'),
     'version':
-        (process.env.TEST_BROWSER_VERSION || 'ANY'),
+      (process.env.TEST_BROWSER_VERSION || 'ANY'),
     'goog:chromeOptions': {
-      binary: puppeteer.executablePath()
+      binary: puppeteer.executablePath(),
+      args: ['--headless', '--disable-gpu', '--window-size=800,600']
     }
   },
 
@@ -25,7 +26,7 @@ module.exports = {
   // A base URL for your application under test.
   baseUrl:
     'http://' + (process.env.HTTP_HOST || 'localhost') +
-          ':' + (process.env.HTTP_PORT || webServerDefaultPort),
+    ':' + (process.env.HTTP_PORT || webServerDefaultPort),
 
   directConnect: true
 };

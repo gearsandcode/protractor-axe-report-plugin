@@ -5,6 +5,8 @@ var _ = require('lodash');
 var handlebars = require('handlebars');
 var AxeBuilder = require('axe-webdriverjs');
 
+var { compile } = require('expression-eval');
+
 /**
  * When testing your website agains the aXe plugin, you can generate different things in the report
  * enabling this plugin in your config file:
@@ -62,7 +64,9 @@ runAxeTest = function(testName, selector) {
       const capabilities = protractorConfig.capabilities;
       browserName = capabilities.browserName;
       if (pluginConfig.htmlReportFilename) {
-        fileName = eval("'use strict'; `" + pluginConfig.htmlReportFilename.replace(/#{/g, '${') + "`");
+        fileName = pluginConfig.htmlReportFilename
+          .replace(/((#|$){[^}]+})/g, (m) =>
+            compile(m.substring(2, m.length - 1).trim())({capabilities}));
       } else {
         fileName = `a11y-${browserName}.html`;
       }

@@ -12,7 +12,7 @@ exports.config = {
     path: '../index.js',
     ignoreAxeFailures: true,
     htmlReportPath: 'reports',
-    htmlReportFilename: 'a11y-#{capabilities.browserName}-#{capabilities.specs[0].split("/").reduce((a,b) => b).split(".")[0]}.html',
+    htmlReportFilename: 'a11y-#{capabilities.browserName}-#{capabilities.specs[0].split("/").slice(-1)[0].split(".")[0]}.html',
     displayHelpUrl: true,
     displayContext: true,
     displayPasses: true,
