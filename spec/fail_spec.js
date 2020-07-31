@@ -3,6 +3,6 @@ describe('check if accessibility plugin works on bad apps', function() {
     browser.get('badMarkup.html');
     expect(true).toBe(true);
 
-    runAxeTest('Failure page');
+    runAxeTest('Failure page', browser.driver);
   });
 });

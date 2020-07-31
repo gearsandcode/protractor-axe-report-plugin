@@ -11,7 +11,6 @@ var CommandlineTest = function(command) {
   this.stdioOnlyOnFailures_ = true;
   this.expectedErrors_ = [];
   this.assertExitCodeOnly_ = false;
-  this.expectedFilesExist_ = [];
 
   // If stdioOnlyOnFailures_ is true, do not stream stdio unless test failed.
   // This is to prevent tests with expected failures from polluting the output.
@@ -31,12 +30,6 @@ var CommandlineTest = function(command) {
   // Set the expected exit code for the test command.
   this.expectExitCode = function(exitCode) {
     self.expectedExitCode_ = exitCode;
-    return self;
-  };
-
-  // Set an expected file to exist.
-  this.expectFileExists = function(relativePath) {
-    self.expectedFilesExist_.push(relativePath);
     return self;
   };
 
@@ -115,13 +108,6 @@ var CommandlineTest = function(command) {
       if (self.assertExitCodeOnly_) {
         return;
       }
-
-      self.expectedFilesExist_.forEach((relativePath) => {
-        if (!fs.existsSync(relativePath)) {
-          flushAndFail('expecting file to exist: ' +
-              relativePath + ', actual: not found');
-        }
-      });
 
       var raw_data = fs.readFileSync(testOutputPath);
       var testOutput = JSON.parse(raw_data);
