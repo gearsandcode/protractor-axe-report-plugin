@@ -6,6 +6,6 @@ describe('accessibility', function() {
       expect(inputs.length).toEqual(2);
     });
 
-    runAxeTest('Success page', browser.driver);
+    runAxeTest('Success page');
   });
 });
