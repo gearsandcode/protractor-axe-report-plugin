@@ -105,8 +105,9 @@ Enable this plugin in the protractor.conf.js file:
         displayViolations: true|false, // Display vioaltions. Defaults to true.
         standardsToReport: ['wcag2a', 'wcag2aa'], // A list of standards to report on. If empty, reports on all standards.
         ignoreAxeFailures: true|false, // If true, aXe failures won't cause the whole test to fail. Defaults to false
-        package: 'protractor-axe-report-plugin',
-        globalParams: {} // This is a configuration object, see below for more detail.
+        package: 'protractor-axe-html-report-plugin',
+        globalParams: {}, // This is a configuration object, see below for more detail.
+        htmlReportPath: '/path/to/reports'|null // The path to the report folder. If null, no HTML report will be generated
     }]
   }
 ```
