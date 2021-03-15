@@ -11,13 +11,18 @@
     </script>
   </head>
   <body>
-    <label for="firstName">First name:</label>
-    <input ng-model="firstName" type="text" id="firstName" />
-    <br>
-    <label for="lastName">Last name:</label>
-    <input ng-model="lastName" type="text" id="lastName" />
-    <br>
-    <p style='font-color: white'>Hello {{firstName}} {{lastName}}</p>
-    <img src="http://example.com/img.jpg" alt="Firstname Lastname">
+    <header>
+      <h1>Test App</h1>
+    </header>
+    <main>
+      <label for="firstName">First name:</label>
+      <input ng-model="firstName" type="text" id="firstName" />
+      <br>
+      <label for="lastName">Last name:</label>
+      <input ng-model="lastName" type="text" id="lastName" />
+      <br>
+      <p style='font-color: white'>Hello {{firstName}} {{lastName}}</p>
+      <img src="http://example.com/img.jpg" alt="Firstname Lastname">
+    </main>
   </body>
 </html>

@@ -3,7 +3,7 @@ var path = require('path');
 
 var _ = require('lodash');
 var handlebars = require('handlebars');
-var AxeBuilder = require('axe-webdriverjs');
+var AxeBuilder = require('@axe-core/webdriverjs');
 
 /**
  * When testing your website agains the aXe plugin, you can generate different things in the report
@@ -56,27 +56,29 @@ function onPrepare() {
 
 runAxeTest = function(testName, selector) {
   var params = pluginConfig.globalParams;
-  const builder = AxeBuilder(browser.driver);
+  const builder = new AxeBuilder(browser.driver);
 
   return new Promise((resolve, reject) => {
     browser.driver.getCapabilities()
       .then((capabilities) => {
-        browserName = capabilities.get('browserName');
-        specName = capabilities.specs[0].split('/');
-        fileName = spec[spec.length - 1].split('.')[0];
-        if (browserName === 'chrome' || browserName === 'firefox') {
-          if (params.include) ensureArray(params.include).forEach((item) => builder.include(item));
-          if (selector) ensureArray(selector).forEach((item) => builder.include(item));
-          if (params.exclude) ensureArray(params.exclude).forEach((item) => builder.exclude(item));
-          if (params.options) builder.options(params.options);
-          builder.analyze((results) => {
-              addResults(testName, browserName, results);
-              resolve(results);
-            });
-        } else {
-          console.log(`Skipping aXe tests in unsupported browser (${browserName}).`);
-          resolve();
-        }
+        browser.getProcessedConfig().then((conf) => {
+            browserName = capabilities.get('browserName');
+            specName = conf.specs[0].split('/');
+            fileName = specName[specName.length - 1].split('.')[0];
+            if (browserName === 'chrome' || browserName === 'firefox') {
+              if (params.include) ensureArray(params.include).forEach((item) => builder.include(item));
+              if (selector) ensureArray(selector).forEach((item) => builder.include(item));
+              if (params.exclude) ensureArray(params.exclude).forEach((item) => builder.exclude(item));
+              if (params.options) builder.options(params.options);
+              builder.analyze().then((results) => {
+                  addResults(testName, browserName, results);
+                  resolve(results);
+                });
+            } else {
+              console.log(`Skipping aXe tests in unsupported browser (${browserName}).`);
+              resolve();
+            }
+        });
       });
   });
 }
